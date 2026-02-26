@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Search, Filter, Box, Info } from 'lucide-react';
+import { Search, Filter, Box } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getProducts } from '../services/api';
 import type { ProductWithTiers } from '../types/database';
