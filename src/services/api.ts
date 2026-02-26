@@ -7,7 +7,7 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
     {
         id: 'MERC-001', name: 'Alo Leggins', description: 'Tallas S, M y L. Colores: Negro, Café, Navy, Gris, Durazno',
         category: 'ALO ROPA', stock: 150, min_stock: 20, tag: 'Top Ventas', status: 'active', last_sync: 'Hace 2 min',
-        image: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800&q=80',
+        image: '/images/leggings.png',
         created_at: '', updated_at: '',
         tiers: [
             { id: 't1', product_id: 'MERC-001', tier_level: 1, label: '1-4 pzs', price: 1050, threshold: 1 },
@@ -19,7 +19,7 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
     {
         id: 'MERC-002', name: 'Hover-1 Board (Patineta)', description: 'Patineta Hoverboard Color, Negro y Rojo',
         category: 'HOVER BOARD', stock: 45, min_stock: 10, tag: null, status: 'active', last_sync: 'Hace 2 min',
-        image: 'https://images.unsplash.com/photo-1558244402-286dd748c593?w=800&q=80',
+        image: '/images/hoverboard.png',
         created_at: '', updated_at: '',
         tiers: [
             { id: 't5', product_id: 'MERC-002', tier_level: 1, label: '1-4 pzs', price: 1530, threshold: 1 },
@@ -31,7 +31,7 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
     {
         id: 'MERC-003', name: 'Set Pijama Conjunto (2pzs)', description: '2 Conjuntos por Set, 2-3 Todler (Etiqueta con Marca)',
         category: 'PIJAMA NIÑO', stock: 200, min_stock: 50, tag: 'No Acumulable', status: 'active', last_sync: 'Hace 5 min',
-        image: 'https://images.unsplash.com/photo-1519238396550-9f5eb0ce8e89?w=800&q=80',
+        image: '/images/pajamas.png',
         created_at: '', updated_at: '',
         tiers: [
             { id: 't9', product_id: 'MERC-003', tier_level: 1, label: '1-9 sets', price: 99, threshold: 1 },
@@ -43,7 +43,7 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
     {
         id: 'MERC-004', name: 'Pack Amazon Emprendedor (10 Pzs)', description: 'Productos de Amazon 10 Pzs por Caja',
         category: 'AMAZON PAQUETES', stock: 24, min_stock: 5, tag: null, status: 'warning', last_sync: 'Hace 12 min',
-        image: 'https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800&q=80',
+        image: '/images/amazon_box.png',
         created_at: '', updated_at: '',
         tiers: [
             { id: 't13', product_id: 'MERC-004', tier_level: 1, label: '1-2 cajas', price: 760, threshold: 1 },
@@ -55,7 +55,7 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
     {
         id: 'MERC-005', name: 'Pack Maquillaje Revolution (69Pzs)', description: 'Surtido variado: Bases, correctores, labiales, gloss, sombras y más',
         category: 'MAQUILLAJE', stock: 12, min_stock: 15, tag: 'Premium', status: 'warning', last_sync: 'Hace 1 hr',
-        image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80',
+        image: '/images/makeup.png',
         created_at: '', updated_at: '',
         tiers: [
             { id: 't17', product_id: 'MERC-005', tier_level: 1, label: '1 caja', price: 4200, threshold: 1 },
@@ -67,7 +67,7 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
     {
         id: 'MERC-006', name: 'Ropa Target Mujer', description: 'Vestidos, playeras, pants con etiqueta de marca. Todas las tallas',
         category: 'ROPA TARGET', stock: 500, min_stock: 100, tag: 'No Acumulable', status: 'active', last_sync: 'Hace 2 min',
-        image: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80',
+        image: '/images/target_clothes.png',
         created_at: '', updated_at: '',
         tiers: [
             { id: 't21', product_id: 'MERC-006', tier_level: 1, label: '1-9 pzs', price: 110, threshold: 1 },
