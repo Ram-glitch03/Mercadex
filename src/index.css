@@ -170,3 +170,106 @@ button {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* --- MOBILE RESPONSIVE STYLES --- */
+@media (max-width: 768px) {
+  /* Global adjustments */
+  .main-content {
+    padding: 1rem !important;
+  }
+  
+  /* Landing Page adjustments */
+  .landing-nav {
+    flex-direction: column;
+    padding: 1.5rem 1rem !important;
+    gap: 1rem;
+    text-align: center;
+  }
+  .landing-nav-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .landing-nav-buttons > div, .landing-nav-buttons > button {
+    width: 100%;
+    justify-content: center;
+  }
+  .landing-hero {
+    padding: 1rem !important;
+  }
+  .hero-title {
+    font-size: 2.2rem !important;
+  }
+  .hero-subtitle {
+    font-size: 1rem !important;
+    padding: 0 0.5rem;
+  }
+  .hero-cta {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-cta > button {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  /* Catalog & Wholesale adjustments */
+  .catalog-nav {
+    flex-direction: column;
+    padding: 1rem !important;
+    gap: 1.5rem;
+    align-items: stretch !important;
+  }
+  .catalog-nav > div {
+    flex-direction: column;
+    align-items: stretch !important;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  .catalog-nav button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .catalog-hero {
+    padding: 1.5rem !important;
+  }
+  .catalog-hero-title {
+    font-size: 1.75rem !important;
+  }
+  .catalog-hero-search {
+    flex-direction: column;
+  }
+  .catalog-hero-search > div {
+    width: 100% !important;
+  }
+  .catalog-hero-search > button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .product-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Dashboard Adjustments */
+  .app-container.dashboard-layout {
+    flex-direction: column !important;
+  }
+  .dashboard-sidebar {
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding: 1rem !important;
+  }
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .chart-container {
+    padding: 1rem !important;
+    overflow-x: auto;
+  }
+  .inventory-table-container {
+    overflow-x: auto;
+  }
+}

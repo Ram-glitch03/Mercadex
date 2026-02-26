@@ -11,8 +11,8 @@ export default function WholesalePortal() {
     return (
         <div className="app-container" style={{ flexDirection: 'column' }}>
             {/* Navbar */}
-            <nav className="glass-panel" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem', margin: '1rem', borderRadius: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+            <nav className="glass-panel catalog-nav" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem', margin: '1rem', borderRadius: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
                     <h2 className="text-gradient" style={{ margin: 0 }}>SAE Mayoreo</h2>
                     <div style={{ display: 'flex', gap: '1rem' }}>
                         <Link to="/shop" style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

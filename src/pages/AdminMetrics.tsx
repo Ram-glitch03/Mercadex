@@ -55,9 +55,9 @@ export default function AdminMetrics() {
                 ))}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+            <div className="metrics-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
                 {/* Main Chart */}
-                <div className="glass-panel" style={{ padding: '2rem' }}>
+                <div className="glass-panel chart-container" style={{ padding: '2rem' }}>
                     <h3 style={{ marginBottom: '2rem', fontSize: '1.2rem' }}>Ingresos vs Rentabilidad (7 días)</h3>
                     <div style={{ height: '350px', width: '100%' }}>
                         <ResponsiveContainer width="100%" height="100%">

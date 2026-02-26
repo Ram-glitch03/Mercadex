@@ -14,14 +14,14 @@ export default function LandingPage() {
             </div>
 
             {/* Top Nav */}
-            <nav style={{ position: 'relative', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 3rem' }}>
+            <nav className="landing-nav" style={{ position: 'relative', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 3rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <Package size={28} color="var(--accent-primary)" />
                     <h1 style={{ fontSize: '1.5rem', fontFamily: 'var(--font-heading)', margin: 0 }}>
                         <span className="text-gradient">Mercadex</span>
                     </h1>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <div className="landing-nav-buttons" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.8rem', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '20px' }}>
                         <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-success)', boxShadow: '0 0 8px var(--accent-success)' }} />
                         <span style={{ fontSize: '0.75rem', color: 'var(--accent-success)', fontWeight: '500' }}>SAE Online</span>
@@ -38,23 +38,23 @@ export default function LandingPage() {
             </nav>
 
             {/* Hero Section */}
-            <main style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 3rem', textAlign: 'center' }}>
+            <main className="landing-hero" style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 3rem', textAlign: 'center' }}>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1.25rem', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '24px', marginBottom: '2rem', backdropFilter: 'blur(8px)' }}>
                     <ShieldCheck size={16} color="var(--accent-success)" />
                     <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', letterSpacing: '0.5px' }}>Inventario sincronizado en tiempo real desde ASPEL SAE</span>
                 </div>
 
-                <h1 style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)', lineHeight: '1.05', marginBottom: '1.5rem', fontFamily: 'var(--font-heading)', maxWidth: '900px' }}>
+                <h1 className="hero-title" style={{ fontSize: 'clamp(2.5rem, 6vw, 5.5rem)', lineHeight: '1.05', marginBottom: '1.5rem', fontFamily: 'var(--font-heading)', maxWidth: '900px' }}>
                     <span className="text-gradient">Portal de Mayoreo</span><br />
                     Mercadex
                 </h1>
 
-                <p style={{ fontSize: '1.3rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '3rem', maxWidth: '650px' }}>
+                <p className="hero-subtitle" style={{ fontSize: '1.3rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '3rem', maxWidth: '650px' }}>
                     Explora las líneas de importación exclusivas: Ropa Target, Amazon Pallets, Juguetes y Electrónicos. Precios escalonados por volumen con stock actualizado al minuto.
                 </p>
 
                 {/* CTA Buttons */}
-                <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '4rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <div className="hero-cta" style={{ display: 'flex', gap: '1.5rem', marginBottom: '4rem', flexWrap: 'wrap', justifyContent: 'center', width: '100%', maxWidth: '600px' }}>
                     <button
                         onClick={() => navigate('/shop')}
                         style={{

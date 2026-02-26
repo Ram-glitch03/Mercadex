@@ -19,9 +19,9 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="app-container" style={{ flexDirection: 'row' }}>
+        <div className="app-container dashboard-layout" style={{ flexDirection: 'row' }}>
             {/* Sidebar */}
-            <aside className="glass-panel" style={{ width: '280px', margin: '1rem', display: 'flex', flexDirection: 'column' }}>
+            <aside className="glass-panel dashboard-sidebar" style={{ width: '280px', margin: '1rem', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ padding: '2rem' }}>
                     <h2 className="text-gradient">SAE Metrics</h2>
                 </div>

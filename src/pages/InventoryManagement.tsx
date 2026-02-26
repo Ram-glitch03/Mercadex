@@ -44,7 +44,7 @@ export default function InventoryManagement() {
 
     return (
         <div style={{ paddingBottom: '2rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="catalog-nav" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                 <div>
                     <h1 style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>Gestión de Inventario (SAE)</h1>
                     <p style={{ color: 'var(--text-secondary)' }}>Administra y verifica el stock físico sincronizado desde ASPEL SAE.</p>
@@ -65,7 +65,7 @@ export default function InventoryManagement() {
                 </div>
             </div>
 
-            <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '2rem', display: 'flex', gap: '1rem' }}>
+            <div className="glass-panel catalog-nav" style={{ padding: '1.5rem', marginBottom: '2rem', display: 'flex', gap: '1rem' }}>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '0.5rem 1rem' }}>
                     <Search size={18} style={{ color: 'var(--text-secondary)', marginRight: '0.5rem' }} />
                     <input

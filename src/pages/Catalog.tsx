@@ -37,16 +37,16 @@ export default function Catalog() {
     return (
         <div style={{ paddingBottom: '4rem' }}>
             {/* Hero Section */}
-            <div className="glass-panel" style={{ padding: '3rem', marginBottom: '2.5rem', background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.2)', position: 'relative', overflow: 'hidden' }}>
+            <div className="glass-panel catalog-hero" style={{ padding: '3rem', marginBottom: '2.5rem', background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', border: '1px solid rgba(139,92,246,0.2)', position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', top: '-50%', right: '-10%', width: '400px', height: '400px', background: 'var(--accent-primary)', filter: 'blur(120px)', opacity: 0.1, borderRadius: '50%' }} />
-                <h1 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Surtido y Mayoreo Directo (Mercadex)</h1>
+                <h1 className="text-gradient catalog-hero-title" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Surtido y Mayoreo Directo (Mercadex)</h1>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '600px', marginBottom: '2rem', lineHeight: '1.6' }}>
                     Inventario en tiempo real de lotes de Ropa, Maquillaje, Electrónicos y Paquetes de Amazon directamente de nuestras bodegas, con precios escalonados por volumen.
                 </p>
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div className="catalog-hero-search" style={{ display: 'flex', gap: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '0.5rem 1rem', width: '400px', transition: 'all 0.2s', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)' }} onFocus={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'} onBlur={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}>
                         <Search size={18} style={{ color: 'var(--text-secondary)', marginRight: '0.5rem' }} />
-                        <input type="text" placeholder="Buscar por SKU, Nombre o Categoría..." style={{ background: 'transparent', border: 'none', color: 'white', outline: 'none', width: '100%', fontFamily: 'var(--font-sans)' }} />
+                        <input type="text" placeholder="Buscar por SKU..." style={{ background: 'transparent', border: 'none', color: 'white', outline: 'none', width: '100%', fontFamily: 'var(--font-sans)' }} />
                     </div>
                     <button className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Filter size={18} /> Filtros
@@ -60,7 +60,7 @@ export default function Catalog() {
             </div>
 
             {/* Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.5rem' }}>
+            <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.5rem' }}>
                 {displayProducts.map((p) => (
                     <div
                         key={p.id}
