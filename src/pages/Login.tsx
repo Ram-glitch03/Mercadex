@@ -18,13 +18,13 @@ export default function Login() {
             <div style={{ background: 'var(--bg-secondary)', padding: '3rem 2rem', textAlign: 'center', borderBottom: '1px solid var(--border-color)' }}>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', marginBottom: '1.5rem' }}>
                     <ShieldCheck size={14} color="var(--accent-success)" />
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '500' }}>SAE Sync Activo • Mercadex Portal</span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '500' }}>ERP Nativo Activo • Mercadex Portal</span>
                 </div>
                 <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', lineHeight: '1.1', marginBottom: '0.75rem', fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>
                     Portal de Mayoreo <span style={{ color: 'var(--accent-primary)' }}>Mercadex</span>
                 </h1>
                 <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: '1.5', maxWidth: '500px', margin: '0 auto 1.5rem auto' }}>
-                    Stock sincronizado al minuto desde ASPEL SAE.
+                    Stock sincronizado en la nube en tiempo real.
                 </p>
                 <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)' }}>

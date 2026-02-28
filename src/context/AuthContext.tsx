@@ -6,7 +6,7 @@ interface AuthContextType {
     role: UserRole;
     login: (role: UserRole) => void;
     logout: () => void;
-    saeClientId?: string;
+    clientId?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const logout = () => setRole(null);
 
     return (
-        <AuthContext.Provider value={{ role, login, logout, saeClientId: role === 'client' ? 'CLI-001' : undefined }}>
+        <AuthContext.Provider value={{ role, login, logout, clientId: role === 'client' ? 'CLI-001' : undefined }}>
             {children}
         </AuthContext.Provider>
     );

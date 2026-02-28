@@ -8,7 +8,7 @@ import Checkout from './Checkout';
 import { useCart } from '../context/CartContext';
 
 export default function WholesalePortal() {
-    const { role, logout, saeClientId } = useAuth();
+    const { role, logout, clientId } = useAuth();
     const { cartCount } = useCart();
     const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ export default function WholesalePortal() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     {role === 'client' ? (
                         <>
-                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Cliente: {saeClientId}</span>
+                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Cliente: {clientId}</span>
                             <button
                                 onClick={() => navigate('/shop/cart')}
                                 style={{ background: 'var(--accent-primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: '8px', display: 'flex', gap: '0.4rem', alignItems: 'center', fontSize: '0.85rem', border: 'none', cursor: 'pointer' }}

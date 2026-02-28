@@ -57,7 +57,7 @@ export default function InventoryManagement() {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
                 <div style={{ textAlign: 'center' }}>
                     <div style={{ width: '40px', height: '40px', border: '3px solid var(--border-color)', borderTopColor: 'var(--accent-primary)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 1rem auto' }} />
-                    <p style={{ color: 'var(--text-secondary)' }}>Cargando inventario SAE...</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>Cargando inventario de la nube...</p>
                     <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
                 </div>
             </div>
@@ -68,8 +68,8 @@ export default function InventoryManagement() {
         <div style={{ paddingBottom: '2rem', overflowX: 'hidden' }}>
             <div className="catalog-nav" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
                 <div>
-                    <h1 style={{ fontSize: '1.5rem', marginBottom: '0.2rem', color: 'var(--text-primary)' }}>Gestión de Inventario (SAE)</h1>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Stock físico sincronizado desde ASPEL SAE.</p>
+                    <h1 style={{ fontSize: '1.5rem', marginBottom: '0.2rem', color: 'var(--text-primary)' }}>Reporte de Inventario</h1>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Visualización de stock actual en la nube ERP.</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     <button

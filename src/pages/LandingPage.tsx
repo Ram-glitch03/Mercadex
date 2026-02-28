@@ -23,7 +23,7 @@ export default function LandingPage() {
                 <div className="landing-nav-buttons" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.8rem', background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.15)', borderRadius: '20px' }}>
                         <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-success)', boxShadow: '0 0 6px var(--accent-success)' }} />
-                        <span style={{ fontSize: '0.75rem', color: 'var(--accent-success)', fontWeight: '500' }}>SAE Online</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--accent-success)', fontWeight: '500' }}>Cloud ERP</span>
                     </div>
                     <button
                         onClick={() => navigate('/login')}
@@ -40,7 +40,7 @@ export default function LandingPage() {
             <main className="landing-hero" style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center' }}>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1.25rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '24px', marginBottom: '2rem' }}>
                     <ShieldCheck size={16} color="var(--accent-success)" />
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', letterSpacing: '0.3px' }}>Inventario sincronizado en tiempo real desde ASPEL SAE</span>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', letterSpacing: '0.3px' }}>Inventario impulsado por Supabase Cloud</span>
                 </div>
 
                 <h1 className="hero-title" style={{ fontSize: 'clamp(2.2rem, 6vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontFamily: 'var(--font-heading)', maxWidth: '800px' }}>
@@ -93,7 +93,7 @@ export default function LandingPage() {
                     {[
                         { icon: <Truck size={22} />, title: 'Envío Directo', desc: 'Desde nuestras bodegas a tu negocio', color: 'var(--accent-primary)' },
                         { icon: <BarChart3 size={22} />, title: 'Precios por Volumen', desc: 'Descuentos automáticos por cantidad', color: 'var(--accent-success)' },
-                        { icon: <Database size={22} />, title: 'Stock en Tiempo Real', desc: 'Sincronizado con ASPEL SAE', color: 'var(--accent-warning)' },
+                        { icon: <Database size={22} />, title: 'Stock en Tiempo Real', desc: 'Inventario 100% nativo en la nube', color: 'var(--accent-warning)' },
                         { icon: <Zap size={22} />, title: 'Cotización Rápida', desc: 'Agrega al carrito y solicita pedido', color: 'var(--accent-primary)' },
                     ].map((feat, i) => (
                         <div key={i} className="glass-panel" style={{ padding: '1.25rem', textAlign: 'left', transition: 'transform 0.2s', cursor: 'default' }}

@@ -24,7 +24,7 @@ export default function AdminMetrics() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '0.75rem' }}>
                 <div>
                     <h2 style={{ color: 'var(--text-primary)' }}>Dashboard de Ventas</h2>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Métricas en tiempo real sincronizadas desde ASPEL SAE</p>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Métricas de negocio actualizadas en tiempo real.</p>
                 </div>
                 <button className="btn-secondary" style={{ whiteSpace: 'nowrap' }}>Exportar Reporte</button>
             </div>
