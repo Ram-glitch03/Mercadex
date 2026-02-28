@@ -7,130 +7,7 @@ async function main() {
     const sql = postgres(connectionString, { ssl: 'require' });
 
     try {
-        console.log("Dropping old simple tables to recreate full versions...");
-        await sql`DROP TABLE IF EXISTS order_items CASCADE;`;
-        await sql`DROP TABLE IF EXISTS orders CASCADE;`;
-        await sql`DROP TABLE IF EXISTS customers CASCADE;`;
-        await sql`DROP TABLE IF EXISTS price_tiers CASCADE;`;
-        await sql`DROP TABLE IF EXISTS product_variants CASCADE;`;
-        await sql`DROP TABLE IF EXISTS inventory_logs CASCADE;`;
-        await sql`DROP TABLE IF EXISTS inventory_levels CASCADE;`;
-        await sql`DROP TABLE IF EXISTS products CASCADE;`;
-        await sql`DROP TABLE IF EXISTS dashboard_metrics CASCADE;`;
-        await sql`DROP TABLE IF EXISTS top_products_view CASCADE;`;
-        await sql`DROP TABLE IF EXISTS revenue_daily CASCADE;`;
-        await sql`DROP TABLE IF EXISTS metrics_log CASCADE;`;
-
-        console.log("Creating tables...");
-        await sql`
-            CREATE TABLE products (
-                id VARCHAR(100) PRIMARY KEY, -- Using VARCHAR as id to match MERC-001 format
-                name VARCHAR(255) NOT NULL,
-                description TEXT,
-                category VARCHAR(100),
-                stock INT DEFAULT 0,
-                min_stock INT DEFAULT 0,
-                tag VARCHAR(100),
-                status VARCHAR(50),
-                last_sync VARCHAR(50),
-                image TEXT,
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-                updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-            );
-        `;
-
-        await sql`
-            CREATE TABLE price_tiers (
-                id VARCHAR(100) PRIMARY KEY,
-                product_id VARCHAR(100) REFERENCES products(id) ON DELETE CASCADE,
-                tier_level INT NOT NULL,
-                label VARCHAR(100),
-                price DECIMAL(10, 2) NOT NULL,
-                threshold INT NOT NULL
-            );
-        `;
-
-        await sql`
-            CREATE TABLE product_variants (
-                id VARCHAR(100) PRIMARY KEY,
-                product_id VARCHAR(100) REFERENCES products(id) ON DELETE CASCADE,
-                label VARCHAR(255) NOT NULL
-            );
-        `;
-
-        await sql`
-            CREATE TABLE inventory_logs (
-                id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-                product_id VARCHAR(100) REFERENCES products(id) ON DELETE CASCADE,
-                variant_id VARCHAR(100) REFERENCES product_variants(id) ON DELETE SET NULL,
-                movement_type VARCHAR(50) NOT NULL, -- 'IN', 'OUT', 'ADJUSTMENT'
-                quantity INT NOT NULL,
-                reason VARCHAR(255),
-                created_by VARCHAR(100) DEFAULT 'admin',
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-            );
-        `;
-
-        await sql`
-            CREATE TABLE dashboard_metrics (
-                id INT PRIMARY KEY DEFAULT 1,
-                sales_today DECIMAL(15, 2),
-                sales_change DECIMAL(5, 2),
-                active_clients INT,
-                clients_change DECIMAL(5, 2),
-                pending_orders INT,
-                orders_change DECIMAL(5, 2),
-                profitability DECIMAL(5, 2),
-                profitability_change DECIMAL(5, 2)
-            );
-        `;
-
-        await sql`
-            CREATE TABLE top_products_view (
-                name VARCHAR(255) PRIMARY KEY,
-                units_sold INT,
-                revenue DECIMAL(15, 2)
-            );
-        `;
-
-        await sql`
-            CREATE TABLE revenue_daily (
-                day VARCHAR(10) PRIMARY KEY,
-                ingresos DECIMAL(15, 2),
-                costos DECIMAL(15, 2)
-            );
-        `;
-
-        await sql`
-            CREATE TABLE customers (
-              id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-              sae_client_id VARCHAR(100) UNIQUE,
-              name VARCHAR(255) NOT NULL,
-              email VARCHAR(255) UNIQUE NOT NULL,
-              created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-            );
-        `;
-
-        await sql`
-            CREATE TABLE orders (
-              id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-              client_id VARCHAR(100),
-              total DECIMAL(10, 2) NOT NULL,
-              status VARCHAR(50) DEFAULT 'pending',
-              created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-            );
-        `;
-
-        await sql`
-            CREATE TABLE order_items (
-              id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-              order_id uuid REFERENCES orders(id) ON DELETE CASCADE,
-              product_id VARCHAR(100) REFERENCES products(id),
-              quantity INT NOT NULL,
-              unit_price DECIMAL(10, 2) NOT NULL,
-              subtotal DECIMAL(10, 2) NOT NULL
-            );
-        `;
+        console.log("Schema already managed. Proceeding to insert mock products...");
 
         console.log("Schema updated. Now inserting mock products...");
 
@@ -220,13 +97,28 @@ async function main() {
         `;
 
         await sql`
-            INSERT INTO top_products_view (name, units_sold, revenue)
+            INSERT INTO customers (id, name, email)
             VALUES 
-            ('Paletas Amazon Mixtas', 14, 133000),
-            ('Lotes Ropa Target', 32, 496000),
-            ('Kits Maquillaje', 156, 49920),
-            ('Lotes Juguetes Disney', 45, 184500)
-            ON CONFLICT (name) DO NOTHING;
+            ('CLI-001', 'Mayorista Centro', 'centro@mayoristas.com'),
+            ('CLI-002', 'Boutique Norte', 'contacto@boutiquenorte.com')
+            ON CONFLICT (id) DO NOTHING;
+        `;
+
+        // Instead of inserting into a view, we insert orders
+        await sql`
+            INSERT INTO orders (id, client_id, total, status)
+            VALUES 
+            ('00000000-0000-0000-0000-000000000001', 'CLI-001', 133000, 'completed'),
+            ('00000000-0000-0000-0000-000000000002', 'CLI-002', 496000, 'completed')
+            ON CONFLICT (id) DO NOTHING;
+        `;
+
+        await sql`
+            INSERT INTO order_items (id, order_id, product_id, product_name, quantity, unit_price, subtotal)
+            VALUES 
+            ('10000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', 'MERC-004', 'Paletas Amazon Mixtas', 14, 9500, 133000),
+            ('20000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002', 'MERC-006', 'Lotes Ropa Target', 32, 15500, 496000)
+            ON CONFLICT (id) DO NOTHING;
         `;
 
         await sql`
