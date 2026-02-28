@@ -3,9 +3,13 @@ import { useAuth } from '../context/AuthContext';
 import { ShoppingBag, History, LogOut, Package } from 'lucide-react';
 import Catalog from './Catalog';
 import ProductDetail from './ProductDetail';
+import Cart from './Cart';
+import Checkout from './Checkout';
+import { useCart } from '../context/CartContext';
 
 export default function WholesalePortal() {
     const { role, logout, saeClientId } = useAuth();
+    const { cartCount } = useCart();
     const navigate = useNavigate();
 
     return (
@@ -31,10 +35,13 @@ export default function WholesalePortal() {
                     {role === 'client' ? (
                         <>
                             <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Cliente: {saeClientId}</span>
-                            <button style={{ background: 'var(--accent-primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: '8px', display: 'flex', gap: '0.4rem', alignItems: 'center', fontSize: '0.85rem' }}>
-                                <ShoppingBag size={16} /> Carrito (0)
+                            <button
+                                onClick={() => navigate('/shop/cart')}
+                                style={{ background: 'var(--accent-primary)', color: 'white', padding: '0.5rem 1rem', borderRadius: '8px', display: 'flex', gap: '0.4rem', alignItems: 'center', fontSize: '0.85rem', border: 'none', cursor: 'pointer' }}
+                            >
+                                <ShoppingBag size={16} /> Carrito ({cartCount})
                             </button>
-                            <button onClick={logout} style={{ color: 'var(--text-secondary)' }} title="Cerrar Sesión">
+                            <button onClick={logout} style={{ color: 'var(--text-secondary)', background: 'transparent', border: 'none', cursor: 'pointer' }} title="Cerrar Sesión">
                                 <LogOut size={18} />
                             </button>
                         </>
@@ -50,7 +57,9 @@ export default function WholesalePortal() {
                 <Routes>
                     <Route path="/" element={<Catalog />} />
                     <Route path="/product/:id" element={<ProductDetail />} />
-                    <Route path="/orders" element={<div><h2>Historial de Pedidos</h2><p style={{ color: 'var(--text-secondary)' }}>Aquí se listarán los pedidos anteriores.</p></div>} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/orders" element={<div style={{ padding: '2rem' }}><h2>Historial de Pedidos</h2><p style={{ color: 'var(--text-secondary)' }}>Aquí se listarán los pedidos anteriores.</p></div>} />
                 </Routes>
             </main>
         </div>

@@ -24,8 +24,25 @@ export interface PriceTier {
     threshold: number;    // minimum qty to unlock this tier
 }
 
+export interface ProductVariant {
+    id: string;
+    label: string;
+}
+
 export interface ProductWithTiers extends Product {
     tiers: PriceTier[];
+    variants?: ProductVariant[];
+}
+
+export interface CartItem {
+    id: string; // unique cart item id (product_id + variant)
+    productId: string;
+    productName: string;
+    image: string | null;
+    quantity: number;
+    unitPrice: number;
+    categoryId: string;
+    variantLabel?: string;
 }
 
 export interface Order {

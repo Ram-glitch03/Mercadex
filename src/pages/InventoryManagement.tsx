@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Search, Filter, RefreshCw, Edit, MoreVertical, Plus, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, Filter, RefreshCw, Edit, MoreVertical, Plus, CheckCircle2, XCircle, TrendingDown, Package } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { getProducts } from '../services/api';
 import type { ProductWithTiers } from '../types/database';
 
@@ -29,6 +30,27 @@ export default function InventoryManagement() {
         p.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Chart Data calculations
+    const lowStockCount = products.filter(p => p.stock <= p.min_stock).length;
+
+    // Process categories for Pie Chart
+    const categoryDataMap: Record<string, number> = {};
+    products.forEach(p => {
+        categoryDataMap[p.category] = (categoryDataMap[p.category] || 0) + p.stock;
+    });
+    const categoryData = Object.keys(categoryDataMap).map(key => ({
+        name: key,
+        value: categoryDataMap[key]
+    })).filter(c => c.value > 0);
+
+    const PIE_COLORS = ['#E63927', '#1A1A1A', '#4A4A4A', '#F4F4F4', '#ffc658'];
+
+    // Process top products by stock for Bar Chart
+    const stockData = [...products].sort((a, b) => b.stock - a.stock).slice(0, 5).map(p => ({
+        name: p.name.substring(0, 15) + '...',
+        stock: p.stock
+    }));
 
     if (loading) {
         return (
@@ -77,6 +99,82 @@ export default function InventoryManagement() {
                 <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'white', border: '1px solid var(--border-color)', color: 'var(--text-primary)', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
                     <Filter size={16} /> Filtrar
                 </button>
+            </div>
+
+            {/* Charts Section */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
+
+                {/* Global Stock Stats */}
+                <div className="glass-panel" style={{ background: 'white', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(230,57,39,0.1)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Package size={24} />
+                        </div>
+                        <div>
+                            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Total Artículos Físicos</p>
+                            <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--text-primary)', fontWeight: 800 }}>
+                                {products.reduce((acc, p) => acc + p.stock, 0).toLocaleString()}
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: lowStockCount > 0 ? 'rgba(245,158,11,0.1)' : 'rgba(22,163,74,0.1)', color: lowStockCount > 0 ? 'var(--accent-warning)' : 'var(--accent-success)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <TrendingDown size={24} />
+                        </div>
+                        <div>
+                            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Alertas de Bajo Inventario</p>
+                            <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--text-primary)', fontWeight: 800 }}>
+                                {lowStockCount} <span style={{ fontSize: '1rem', fontWeight: 400, color: 'var(--text-secondary)' }}>SKUs afectados</span>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Stock by Category - PieChart */}
+                <div className="glass-panel" style={{ background: 'white', padding: '1.5rem' }}>
+                    <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', margin: '0 0 1rem' }}>Distribución por Categoría</h3>
+                    <div style={{ height: '200px' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={categoryData}
+                                    cx="50%" cy="50%"
+                                    innerRadius={50} outerRadius={80}
+                                    paddingAngle={5}
+                                    dataKey="value"
+                                >
+                                    {categoryData.map((_, index) => (
+                                        <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <RechartsTooltip
+                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+                                    formatter={(value: any) => [`${value} unidades`, 'Stock']}
+                                />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Top Stocked Items - BarChart */}
+                <div className="glass-panel" style={{ background: 'white', padding: '1.5rem' }}>
+                    <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', margin: '0 0 1rem' }}>Top 5 SKUs (Volumen Físico)</h3>
+                    <div style={{ height: '200px' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={stockData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+                                <XAxis dataKey="name" fontSize={11} tickLine={false} axisLine={false} />
+                                <YAxis fontSize={11} tickLine={false} axisLine={false} />
+                                <RechartsTooltip
+                                    cursor={{ fill: 'rgba(230,57,39,0.05)' }}
+                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+                                />
+                                <Bar dataKey="stock" fill="var(--text-primary)" radius={[4, 4, 0, 0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
             </div>
 
             <div className="glass-panel" style={{ overflow: 'hidden', background: 'white' }}>

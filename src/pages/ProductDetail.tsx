@@ -1,11 +1,14 @@
 import { useState, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, ShoppingCart, Info, Check, ShieldCheck, Truck } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 export default function ProductDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
+    const { addToCart } = useCart();
+
     const [quantity, setQuantity] = useState(1);
     const [added, setAdded] = useState(false);
 
@@ -19,8 +22,15 @@ export default function ProductDetail() {
             { q: '+5 pzs', p: 920, threshold: 5 },
             { q: '+20 pzs', p: 810, threshold: 20 },
             { q: '+30 pzs', p: 765, threshold: 30 }
+        ],
+        variants: [
+            { id: 'v1', label: 'Talla S - Negro' },
+            { id: 'v2', label: 'Talla M - Negro' },
+            { id: 'v3', label: 'Talla L - Negro' }
         ]
     };
+
+    const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0]?.id || '');
 
     const parsedTiers = product.tiers.map((t: any, i: number) => {
         const match = t.q.match(/\d+/);
@@ -47,6 +57,24 @@ export default function ProductDetail() {
     }, [quantity, parsedTiers]);
 
     const handleAddToCart = () => {
+        if (product.variants && !selectedVariant) {
+            alert('Por favor selecciona una variante (color/talla).');
+            return;
+        }
+
+        const variantObj = product.variants?.find((v: any) => v.id === selectedVariant);
+
+        addToCart({
+            id: `${product.id}-${selectedVariant}`,
+            productId: product.id,
+            productName: product.name,
+            image: product.image,
+            quantity: quantity,
+            unitPrice: currentPrice,
+            categoryId: product.category,
+            variantLabel: variantObj?.label
+        });
+
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);
     };
@@ -95,6 +123,22 @@ export default function ProductDetail() {
                                 <Truck size={16} /> Envío Inmediato
                             </span>
                         </div>
+
+                        {product.variants && product.variants.length > 0 && (
+                            <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '12px' }}>
+                                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', fontWeight: 600 }}>Selecciona Variante (Talla/Color)</label>
+                                <select
+                                    value={selectedVariant}
+                                    onChange={(e) => setSelectedVariant(e.target.value)}
+                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'white', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}
+                                >
+                                    <option value="" disabled>Elige una opción...</option>
+                                    {product.variants.map((v: any) => (
+                                        <option key={v.id} value={v.id}>{v.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
                     </div>
                 </div>
 

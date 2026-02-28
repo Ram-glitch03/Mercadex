@@ -14,6 +14,15 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
             { id: 't2', product_id: 'MERC-001', tier_level: 2, label: '+5 pzs', price: 920, threshold: 5 },
             { id: 't3', product_id: 'MERC-001', tier_level: 3, label: '+20 pzs', price: 810, threshold: 20 },
             { id: 't4', product_id: 'MERC-001', tier_level: 4, label: '+30 pzs', price: 765, threshold: 30 },
+        ],
+        variants: [
+            { id: 'v1', label: 'Talla S - Negro' },
+            { id: 'v2', label: 'Talla M - Negro' },
+            { id: 'v3', label: 'Talla L - Negro' },
+            { id: 'v4', label: 'Talla S - Navy' },
+            { id: 'v5', label: 'Talla M - Navy' },
+            { id: 'v6', label: 'Talla L - Navy' },
+            { id: 'v7', label: 'Talla M - Durazno' }
         ]
     },
     {
@@ -74,6 +83,9 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
             { id: 't22', product_id: 'MERC-006', tier_level: 2, label: '+10 pzs', price: 80, threshold: 10 },
             { id: 't23', product_id: 'MERC-006', tier_level: 3, label: '+50 pzs', price: 65, threshold: 50 },
             { id: 't24', product_id: 'MERC-006', tier_level: 4, label: '+100 pzs', price: 55, threshold: 100 },
+        ],
+        variants: [
+            { id: 'v8', label: 'Mixto P/M/G (Sin especificar)' }
         ]
     },
     {
