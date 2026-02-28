@@ -138,7 +138,7 @@ export default function Scanner() {
                 </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) minmax(350px, 2fr)', gap: '1.5rem', alignItems: 'start' }}>
+            <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) minmax(350px, 2fr)', gap: '1.5rem', alignItems: 'start' }}>
 
                 {/* Control Panel */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

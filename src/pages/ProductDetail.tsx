@@ -156,7 +156,7 @@ export default function ProductDetail() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 {/* Top: Image + Title */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                     <div className="glass-panel" style={{ height: '350px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '14px', overflow: 'hidden', background: 'var(--bg-secondary)' }}>
                         {product.image ? (
                             <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -277,7 +277,7 @@ export default function ProductDetail() {
                         <Info size={16} color="var(--accent-primary)" />
                         <h3 style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-primary)' }}>Precios por Volumen</h3>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${parsedTiers.length}, 1fr)`, gap: '0.5rem' }}>
+                    <div className="tier-pricing-grid" style={{ display: 'grid', gridTemplateColumns: `repeat(${parsedTiers.length}, 1fr)`, gap: '0.5rem' }}>
                         {parsedTiers.map((t: any, i: number) => {
                             const isActive = activeTierIndex === i;
                             return (

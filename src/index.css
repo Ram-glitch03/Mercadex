@@ -3,13 +3,17 @@
 :root {
   /* Mercadex Brand Palette */
   --bg-primary: #FFFFFF;
-  --bg-secondary: #F4F4F4; /* Light Grey */
+  --bg-secondary: #F4F4F4;
+  /* Light Grey */
   --bg-glass: rgba(255, 255, 255, 0.85);
   --bg-glass-hover: rgba(244, 244, 244, 0.95);
-  --text-primary: #111111; /* Actual Black */
-  --text-secondary: #4A4A4A; /* Dark Grey */
-  --accent-primary: #E32322; /* New Logo Red */
-  --accent-secondary: #c21a1a; 
+  --text-primary: #111111;
+  /* Actual Black */
+  --text-secondary: #4A4A4A;
+  /* Dark Grey */
+  --accent-primary: #E32322;
+  /* New Logo Red */
+  --accent-secondary: #c21a1a;
   --accent-success: #16a34a;
   --accent-warning: #d97706;
   --accent-error: #dc2626;
@@ -179,12 +183,13 @@ button {
   body,
   #root {
     overflow-x: hidden !important;
-    max-width: 100vw !important;
+    max-width: 100% !important;
   }
 
   .main-content {
     padding: 0.75rem !important;
-    max-width: 100vw !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
   }
 
   /* Landing Page */
@@ -294,6 +299,16 @@ button {
   /* Price tier grid inside product cards */
   .product-grid .glass-panel div[style*="grid-template-columns: repeat(4"] {
     font-size: 0.7rem;
+  }
+
+  /* Specific Component Grids to stack vertically */
+  .responsive-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .tier-pricing-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
   /* Dashboard */

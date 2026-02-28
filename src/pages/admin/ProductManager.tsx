@@ -187,7 +187,7 @@ export default function ProductManager() {
                                     <textarea className="input-field" style={{ width: '100%', minHeight: '80px', resize: 'vertical' }} value={currentProduct.description || ''} onChange={e => setCurrentProduct({ ...currentProduct, description: e.target.value })} placeholder="Describe detalladamente el producto..." />
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                     <div>
                                         <label style={labelStyle}>Categoría</label>
                                         <input type="text" className="input-field" style={{ width: '100%' }} value={currentProduct.category || ''} onChange={e => setCurrentProduct({ ...currentProduct, category: e.target.value })} placeholder="Ej. BOLSAS" />
@@ -198,7 +198,7 @@ export default function ProductManager() {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                     <div>
                                         <label style={labelStyle}>Stock Físico</label>
                                         <input type="number" className="input-field" style={{ width: '100%' }} value={currentProduct.stock || 0} onChange={e => setCurrentProduct({ ...currentProduct, stock: parseInt(e.target.value) || 0 })} />
