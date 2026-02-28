@@ -13,6 +13,7 @@ async function main() {
         await sql`DROP TABLE IF EXISTS customers CASCADE;`;
         await sql`DROP TABLE IF EXISTS price_tiers CASCADE;`;
         await sql`DROP TABLE IF EXISTS product_variants CASCADE;`;
+        await sql`DROP TABLE IF EXISTS inventory_logs CASCADE;`;
         await sql`DROP TABLE IF EXISTS inventory_levels CASCADE;`;
         await sql`DROP TABLE IF EXISTS products CASCADE;`;
         await sql`DROP TABLE IF EXISTS dashboard_metrics CASCADE;`;
@@ -54,6 +55,19 @@ async function main() {
                 id VARCHAR(100) PRIMARY KEY,
                 product_id VARCHAR(100) REFERENCES products(id) ON DELETE CASCADE,
                 label VARCHAR(255) NOT NULL
+            );
+        `;
+
+        await sql`
+            CREATE TABLE inventory_logs (
+                id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+                product_id VARCHAR(100) REFERENCES products(id) ON DELETE CASCADE,
+                variant_id VARCHAR(100) REFERENCES product_variants(id) ON DELETE SET NULL,
+                movement_type VARCHAR(50) NOT NULL, -- 'IN', 'OUT', 'ADJUSTMENT'
+                quantity INT NOT NULL,
+                reason VARCHAR(255),
+                created_by VARCHAR(100) DEFAULT 'admin',
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
             );
         `;
 

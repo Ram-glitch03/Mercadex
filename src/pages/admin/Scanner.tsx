@@ -17,6 +17,8 @@ export default function Scanner() {
     const [products, setProducts] = useState<ProductWithTiers[]>([]);
     const [manualSku, setManualSku] = useState('');
     const [isListening, setIsListening] = useState(true);
+    const [scanMode, setScanMode] = useState<'IN' | 'OUT'>('IN');
+    const [isProcessing, setIsProcessing] = useState(false);
 
     // Scanner buffer
     const buffer = useRef('');
@@ -60,23 +62,53 @@ export default function Scanner() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isListening, products]); // Re-bind when products update to have latest catalog
 
-    const processScan = (sku: string) => {
+    const processScan = async (sku: string) => {
         const cleanSku = sku.trim().toUpperCase();
-        if (!cleanSku) return;
+        if (!cleanSku || isProcessing) return;
+
+        setIsProcessing(true);
+        const { supabase } = await import('../../lib/supabase');
 
         const foundProduct = products.find(p => p.id.toUpperCase() === cleanSku);
 
+        let finalStatus: ScannedItem['status'] = 'error';
+        let newStock = foundProduct?.stock || 0;
+
+        if (foundProduct && supabase) {
+            newStock = scanMode === 'IN' ? foundProduct.stock + 1 : Math.max(0, foundProduct.stock - 1);
+
+            try {
+                // Update Stock
+                await supabase.from('products').update({ stock: newStock }).eq('id', foundProduct.id);
+                // Log Movement
+                await supabase.from('inventory_logs').insert([{
+                    product_id: foundProduct.id,
+                    movement_type: scanMode,
+                    quantity: scanMode === 'IN' ? 1 : -1,
+                    reason: `Scanner ${scanMode === 'IN' ? 'Entrada' : 'Salida'}`
+                }]);
+
+                finalStatus = 'success';
+
+                // Update local state to reflect new stock immediately
+                setProducts(prev => prev.map(p => p.id === foundProduct.id ? { ...p, stock: newStock } : p));
+            } catch (err) {
+                console.error("Error updating scan to Supabase", err);
+            }
+        }
+
         const newItem: ScannedItem = {
-            id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+            id: Date.now().toString() + Math.random().toString(36).substring(2, 5),
             sku: cleanSku,
             timestamp: new Date(),
-            status: foundProduct ? 'success' : 'error',
+            status: finalStatus,
             productName: foundProduct?.name,
-            currentStock: foundProduct?.stock
+            currentStock: newStock
         };
 
         setScannedItems(prev => [newItem, ...prev]);
         setManualSku('');
+        setIsProcessing(false);
     };
 
     const handleManualSubmit = (e: React.FormEvent) => {
@@ -127,6 +159,21 @@ export default function Scanner() {
                                 <ArrowRight size={18} />
                             </button>
                         </form>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                        <button
+                            onClick={() => setScanMode('IN')}
+                            style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: scanMode === 'IN' ? '2px solid var(--accent-success)' : '1px solid var(--border-color)', background: scanMode === 'IN' ? 'rgba(22,163,74,0.1)' : 'white', color: scanMode === 'IN' ? 'var(--accent-success)' : 'var(--text-secondary)', fontWeight: 600, cursor: 'pointer' }}
+                        >
+                            Recibir (+1)
+                        </button>
+                        <button
+                            onClick={() => setScanMode('OUT')}
+                            style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: scanMode === 'OUT' ? '2px solid var(--accent-warning)' : '1px solid var(--border-color)', background: scanMode === 'OUT' ? 'rgba(217,119,6,0.1)' : 'white', color: scanMode === 'OUT' ? 'var(--accent-warning)' : 'var(--text-secondary)', fontWeight: 600, cursor: 'pointer' }}
+                        >
+                            Surtir (-1)
+                        </button>
                     </div>
 
                     <div className="glass-panel" style={{ padding: '1.5rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>

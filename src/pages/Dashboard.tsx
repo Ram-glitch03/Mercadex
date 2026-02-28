@@ -1,9 +1,10 @@
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, PackageSearch, LogOut, ScanLine } from 'lucide-react';
+import { LayoutDashboard, PackageSearch, LogOut, ScanLine, Edit3 } from 'lucide-react';
 import AdminMetrics from './AdminMetrics';
 import InventoryManagement from './InventoryManagement';
 import Scanner from './admin/Scanner';
+import ProductManager from './admin/ProductManager';
 
 export default function Dashboard() {
     const { role, logout } = useAuth();
@@ -34,7 +35,11 @@ export default function Dashboard() {
                     </Link>
                     <Link to="/dashboard/inventory" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem', color: location.pathname === '/dashboard/inventory' ? 'var(--accent-primary)' : 'var(--text-secondary)', textDecoration: 'none', borderRadius: '8px', background: location.pathname === '/dashboard/inventory' ? 'rgba(230,57,39,0.06)' : 'transparent', fontWeight: location.pathname === '/dashboard/inventory' ? '600' : '400', fontSize: '0.9rem' }}>
                         <PackageSearch size={18} />
-                        Inventario SAE
+                        Inventario (Reporte)
+                    </Link>
+                    <Link to="/dashboard/products" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem', color: location.pathname === '/dashboard/products' ? 'var(--accent-primary)' : 'var(--text-secondary)', textDecoration: 'none', borderRadius: '8px', background: location.pathname === '/dashboard/products' ? 'rgba(230,57,39,0.06)' : 'transparent', fontWeight: location.pathname === '/dashboard/products' ? '600' : '400', fontSize: '0.9rem' }}>
+                        <Edit3 size={18} />
+                        Gestor de Catálogo
                     </Link>
                     <Link to="/dashboard/scanner" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem', color: location.pathname === '/dashboard/scanner' ? 'var(--accent-primary)' : 'var(--text-secondary)', textDecoration: 'none', borderRadius: '8px', background: location.pathname === '/dashboard/scanner' ? 'rgba(230,57,39,0.06)' : 'transparent', fontWeight: location.pathname === '/dashboard/scanner' ? '600' : '400', fontSize: '0.9rem' }}>
                         <ScanLine size={18} />
@@ -55,6 +60,7 @@ export default function Dashboard() {
                 <Routes>
                     <Route path="/" element={<AdminMetrics />} />
                     <Route path="/inventory" element={<InventoryManagement />} />
+                    <Route path="/products" element={<ProductManager />} />
                     <Route path="/scanner" element={<Scanner />} />
                 </Routes>
             </main>
