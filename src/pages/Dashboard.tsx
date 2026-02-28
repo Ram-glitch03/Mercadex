@@ -1,8 +1,9 @@
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, PackageSearch, LogOut } from 'lucide-react';
+import { LayoutDashboard, PackageSearch, LogOut, ScanLine } from 'lucide-react';
 import AdminMetrics from './AdminMetrics';
 import InventoryManagement from './InventoryManagement';
+import Scanner from './admin/Scanner';
 
 export default function Dashboard() {
     const { role, logout } = useAuth();
@@ -31,9 +32,13 @@ export default function Dashboard() {
                         <LayoutDashboard size={18} />
                         Métricas
                     </Link>
-                    <Link to="/dashboard/inventory" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem', color: location.pathname.includes('/inventory') ? 'var(--accent-primary)' : 'var(--text-secondary)', textDecoration: 'none', borderRadius: '8px', background: location.pathname.includes('/inventory') ? 'rgba(230,57,39,0.06)' : 'transparent', fontWeight: location.pathname.includes('/inventory') ? '600' : '400', fontSize: '0.9rem' }}>
+                    <Link to="/dashboard/inventory" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem', color: location.pathname === '/dashboard/inventory' ? 'var(--accent-primary)' : 'var(--text-secondary)', textDecoration: 'none', borderRadius: '8px', background: location.pathname === '/dashboard/inventory' ? 'rgba(230,57,39,0.06)' : 'transparent', fontWeight: location.pathname === '/dashboard/inventory' ? '600' : '400', fontSize: '0.9rem' }}>
                         <PackageSearch size={18} />
                         Inventario SAE
+                    </Link>
+                    <Link to="/dashboard/scanner" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.75rem', color: location.pathname === '/dashboard/scanner' ? 'var(--accent-primary)' : 'var(--text-secondary)', textDecoration: 'none', borderRadius: '8px', background: location.pathname === '/dashboard/scanner' ? 'rgba(230,57,39,0.06)' : 'transparent', fontWeight: location.pathname === '/dashboard/scanner' ? '600' : '400', fontSize: '0.9rem' }}>
+                        <ScanLine size={18} />
+                        Lector Bluetooth
                     </Link>
                 </nav>
 
@@ -50,6 +55,7 @@ export default function Dashboard() {
                 <Routes>
                     <Route path="/" element={<AdminMetrics />} />
                     <Route path="/inventory" element={<InventoryManagement />} />
+                    <Route path="/scanner" element={<Scanner />} />
                 </Routes>
             </main>
         </div>

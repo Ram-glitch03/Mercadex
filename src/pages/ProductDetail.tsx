@@ -9,7 +9,8 @@ export default function ProductDetail() {
     const location = useLocation();
     const { addToCart } = useCart();
 
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(1); // Fallback for no-variant products
+    const [variantQuantities, setVariantQuantities] = useState<Record<string, number>>({});
     const [added, setAdded] = useState(false);
 
     const product = location.state?.product || {
@@ -30,7 +31,12 @@ export default function ProductDetail() {
         ]
     };
 
-    const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0]?.id || '');
+    const hasVariants = product.variants && product.variants.length > 0;
+
+    const totalQuantity = useMemo(() => {
+        if (!hasVariants) return quantity;
+        return Object.values(variantQuantities).reduce((acc, curr) => acc + curr, 0);
+    }, [quantity, variantQuantities, hasVariants]);
 
     const parsedTiers = product.tiers.map((t: any, i: number) => {
         const match = t.q.match(/\d+/);
@@ -41,41 +47,65 @@ export default function ProductDetail() {
     const currentPrice = useMemo(() => {
         let price = parsedTiers[0].p;
         for (const tier of parsedTiers) {
-            if (quantity >= tier.threshold) {
+            if (totalQuantity >= tier.threshold) {
                 price = tier.p;
             }
         }
         return price;
-    }, [quantity, parsedTiers]);
+    }, [totalQuantity, parsedTiers]);
 
     const activeTierIndex = useMemo(() => {
         let index = 0;
         parsedTiers.forEach((tier: any, i: number) => {
-            if (quantity >= tier.threshold) index = i;
+            if (totalQuantity >= tier.threshold) index = i;
         });
         return index;
-    }, [quantity, parsedTiers]);
+    }, [totalQuantity, parsedTiers]);
+
+    const handleUpdateVariantQuantity = (variantId: string, newQt: number) => {
+        setVariantQuantities(prev => ({
+            ...prev,
+            [variantId]: Math.max(0, newQt)
+        }));
+    };
 
     const handleAddToCart = () => {
-        if (product.variants && !selectedVariant) {
-            alert('Por favor selecciona una variante (color/talla).');
-            return;
+        if (hasVariants) {
+            if (totalQuantity === 0) {
+                alert('Por favor selecciona la cantidad de las variantes que deseas.');
+                return;
+            }
+            // Add each selected variant as a separate cart item
+            product.variants.forEach((v: any) => {
+                const qt = variantQuantities[v.id] || 0;
+                if (qt > 0) {
+                    addToCart({
+                        id: `${product.id}-${v.id}`,
+                        productId: product.id,
+                        productName: product.name,
+                        image: product.image,
+                        quantity: qt,
+                        unitPrice: currentPrice, // All get the exact same volume price
+                        categoryId: product.category,
+                        variantLabel: v.label
+                    });
+                }
+            });
+        } else {
+            addToCart({
+                id: product.id,
+                productId: product.id,
+                productName: product.name,
+                image: product.image,
+                quantity: quantity,
+                unitPrice: currentPrice,
+                categoryId: product.category
+            });
         }
 
-        const variantObj = product.variants?.find((v: any) => v.id === selectedVariant);
-
-        addToCart({
-            id: `${product.id}-${selectedVariant}`,
-            productId: product.id,
-            productName: product.name,
-            image: product.image,
-            quantity: quantity,
-            unitPrice: currentPrice,
-            categoryId: product.category,
-            variantLabel: variantObj?.label
-        });
-
         setAdded(true);
+        setVariantQuantities({}); // reset after adding
+        if (!hasVariants) setQuantity(1);
         setTimeout(() => setAdded(false), 2000);
     };
 
@@ -123,24 +153,46 @@ export default function ProductDetail() {
                                 <Truck size={16} /> Envío Inmediato
                             </span>
                         </div>
-
-                        {product.variants && product.variants.length > 0 && (
-                            <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '12px' }}>
-                                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', fontWeight: 600 }}>Selecciona Variante (Talla/Color)</label>
-                                <select
-                                    value={selectedVariant}
-                                    onChange={(e) => setSelectedVariant(e.target.value)}
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'white', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}
-                                >
-                                    <option value="" disabled>Elige una opción...</option>
-                                    {product.variants.map((v: any) => (
-                                        <option key={v.id} value={v.id}>{v.label}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        )}
                     </div>
                 </div>
+
+                {hasVariants && (
+                    <div className="glass-panel" style={{ background: 'white', overflow: 'hidden' }}>
+                        <div style={{ padding: '1.25rem' }}>
+                            <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Elige tus variantes</h3>
+                        </div>
+                        <div style={{ width: '100%', overflowX: 'auto' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                                <thead>
+                                    <tr style={{ background: 'var(--accent-primary)', color: 'white' }}>
+                                        <th style={{ padding: '0.75rem 1.25rem', fontSize: '0.85rem', fontWeight: 600 }}>TIPO / SABOR</th>
+                                        <th style={{ padding: '0.75rem 1.25rem', fontSize: '0.85rem', fontWeight: 600, width: '180px', textAlign: 'center' }}>SELECCIONA TUS PIEZAS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {product.variants.map((v: any, idx: number) => {
+                                        const q = variantQuantities[v.id] || 0;
+                                        return (
+                                            <tr key={v.id} style={{ borderBottom: idx === product.variants.length - 1 ? 'none' : '1px solid var(--border-color)' }}>
+                                                <td style={{ padding: '1rem 1.25rem' }}>
+                                                    <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem', marginBottom: '0.2rem' }}>{v.label}</div>
+                                                    <div style={{ color: 'var(--accent-primary)', fontSize: '0.75rem', fontWeight: 600 }}>DISPONIBLE</div>
+                                                </td>
+                                                <td style={{ padding: '1rem 1.25rem', verticalAlign: 'middle' }}>
+                                                    <div style={{ display: 'inline-flex', alignItems: 'center', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', overflow: 'hidden', width: '100%' }}>
+                                                        <button onClick={() => handleUpdateVariantQuantity(v.id, q - 1)} style={{ padding: '0.5rem 0.75rem', background: 'white', borderRight: '1px solid var(--border-color)', color: 'var(--text-primary)', fontWeight: 'bold' }}>-</button>
+                                                        <input type="number" readOnly value={q} style={{ flex: 1, width: '40px', textAlign: 'center', background: 'transparent', border: 'none', color: 'var(--text-primary)', fontWeight: 'bold' }} />
+                                                        <button onClick={() => handleUpdateVariantQuantity(v.id, q + 1)} style={{ padding: '0.5rem 0.75rem', background: 'white', borderLeft: '1px solid var(--border-color)', color: 'var(--text-primary)', fontWeight: 'bold' }}>+</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
 
                 {/* Tier Pricing */}
                 <div className="glass-panel" style={{ padding: '1.25rem', background: 'white' }}>
@@ -178,23 +230,22 @@ export default function ProductDetail() {
                             </div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
-                            <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>Cantidad</span>
-                            <div style={{ display: 'inline-flex', alignItems: 'center', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '0.2rem' }}>
-                                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} style={{ width: '34px', height: '34px', background: 'transparent', border: 'none', color: 'var(--text-primary)', fontSize: '1.1rem', cursor: 'pointer', borderRadius: '4px' }}>-</button>
-                                <input
-                                    type="number"
-                                    value={quantity}
-                                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                                    style={{ width: '50px', textAlign: 'center', background: 'transparent', border: 'none', color: 'var(--text-primary)', fontSize: '1.1rem', fontWeight: 'bold', outline: 'none' }}
-                                />
-                                <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))} style={{ width: '34px', height: '34px', background: 'transparent', border: 'none', color: 'var(--text-primary)', fontSize: '1.1rem', cursor: 'pointer', borderRadius: '4px' }}>+</button>
+                            <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>Cantidad Total</span>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '0.4rem 1rem' }}>
+                                <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>{totalQuantity}</span>
+                                {!hasVariants && (
+                                    <div style={{ display: 'flex', gap: '0.5rem', marginLeft: '1rem' }}>
+                                        <button onClick={() => setQuantity(Math.max(1, quantity - 1))} style={{ width: '28px', height: '28px', background: 'white', border: '1px solid var(--border-color)', borderRadius: '4px' }}>-</button>
+                                        <button onClick={() => setQuantity(Math.min(product.stock, quantity + 1))} style={{ width: '28px', height: '28px', background: 'white', border: '1px solid var(--border-color)', borderRadius: '4px' }}>+</button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
 
                     <div style={{ padding: '0.75rem 1rem', background: 'var(--bg-secondary)', borderRadius: '8px', marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Subtotal Estimado:</span>
-                        <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: 'var(--text-primary)' }}>${(currentPrice * quantity).toLocaleString()} MXN</span>
+                        <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: 'var(--text-primary)' }}>${(currentPrice * totalQuantity).toLocaleString()} MXN</span>
                     </div>
 
                     <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
