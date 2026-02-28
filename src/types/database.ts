@@ -26,6 +26,7 @@ export interface PriceTier {
 
 export interface ProductVariant {
     id: string;
+    product_id: string;
     label: string;
 }
 

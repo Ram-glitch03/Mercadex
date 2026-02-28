@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import type { ProductWithTiers, Product, PriceTier, Order, DashboardMetrics, TopProduct, RevenueDataPoint } from '../types/database';
+import type { ProductWithTiers, Product, PriceTier, ProductVariant, Order, DashboardMetrics, TopProduct, RevenueDataPoint } from '../types/database';
 
 // ─── Mock Data (used when Supabase is not configured) ──────────────────────────
 
@@ -16,13 +16,13 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
             { id: 't4', product_id: 'MERC-001', tier_level: 4, label: '+30 pzs', price: 765, threshold: 30 },
         ],
         variants: [
-            { id: 'v1', label: 'Talla S - Negro' },
-            { id: 'v2', label: 'Talla M - Negro' },
-            { id: 'v3', label: 'Talla L - Negro' },
-            { id: 'v4', label: 'Talla S - Navy' },
-            { id: 'v5', label: 'Talla M - Navy' },
-            { id: 'v6', label: 'Talla L - Navy' },
-            { id: 'v7', label: 'Talla M - Durazno' }
+            { id: 'v1', product_id: 'MERC-001', label: 'Talla S - Negro' },
+            { id: 'v2', product_id: 'MERC-001', label: 'Talla M - Negro' },
+            { id: 'v3', product_id: 'MERC-001', label: 'Talla L - Negro' },
+            { id: 'v4', product_id: 'MERC-001', label: 'Talla S - Navy' },
+            { id: 'v5', product_id: 'MERC-001', label: 'Talla M - Navy' },
+            { id: 'v6', product_id: 'MERC-001', label: 'Talla L - Navy' },
+            { id: 'v7', product_id: 'MERC-001', label: 'Talla M - Durazno' }
         ]
     },
     {
@@ -85,7 +85,7 @@ const MOCK_PRODUCTS: ProductWithTiers[] = [
             { id: 't24', product_id: 'MERC-006', tier_level: 4, label: '+100 pzs', price: 55, threshold: 100 },
         ],
         variants: [
-            { id: 'v8', label: 'Mixto P/M/G (Sin especificar)' }
+            { id: 'v8', product_id: 'MERC-006', label: 'Mixto P/M/G (Sin especificar)' }
         ]
     },
     {
@@ -146,16 +146,24 @@ export async function getProducts(): Promise<ProductWithTiers[]> {
         return MOCK_PRODUCTS;
     }
 
-    // Fetch tiers for each product
     const { data: tiers } = await supabase!
         .from('price_tiers')
         .select('*')
         .order('tier_level');
 
-    return (products || []).map((p: Product) => ({
-        ...p,
-        tiers: (tiers || []).filter((t: PriceTier) => t.product_id === p.id),
-    }));
+    // Fetch variants
+    const { data: variants } = await supabase!
+        .from('product_variants')
+        .select('*');
+
+    return (products || []).map((p: Product) => {
+        const productVariants = (variants || []).filter((v: ProductVariant) => v.product_id === p.id);
+        return {
+            ...p,
+            tiers: (tiers || []).filter((t: PriceTier) => t.product_id === p.id),
+            variants: productVariants.length > 0 ? productVariants : undefined
+        };
+    });
 }
 
 export async function getProductById(id: string): Promise<ProductWithTiers | null> {
@@ -177,7 +185,16 @@ export async function getProductById(id: string): Promise<ProductWithTiers | nul
         .eq('product_id', id)
         .order('tier_level');
 
-    return { ...product, tiers: tiers || [] };
+    const { data: variants } = await supabase!
+        .from('product_variants')
+        .select('*')
+        .eq('product_id', id);
+
+    return {
+        ...product,
+        tiers: tiers || [],
+        variants: variants && variants.length > 0 ? variants : undefined
+    };
 }
 
 // ─── Inventory API (Admin) ─────────────────────────────────────────────────────
