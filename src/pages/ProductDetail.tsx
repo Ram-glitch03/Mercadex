@@ -38,6 +38,40 @@ export default function ProductDetail() {
         return Object.values(variantQuantities).reduce((acc, curr) => acc + curr, 0);
     }, [quantity, variantQuantities, hasVariants]);
 
+    const groupedVariants = useMemo(() => {
+        if (!hasVariants) return null;
+
+        const groups: Record<string, any[]> = {};
+        let isGroupable = true;
+
+        product.variants.forEach((v: any) => {
+            const parts = v.label.split(' - ');
+            if (parts.length === 2 && parts[0] && parts[1]) {
+                const groupName = parts[0].trim();
+                const optionName = parts[1].trim();
+                if (!groups[groupName]) groups[groupName] = [];
+                groups[groupName].push({ ...v, optionLabel: optionName });
+            } else {
+                isGroupable = false;
+            }
+        });
+
+        return isGroupable ? groups : null;
+    }, [product.variants, hasVariants]);
+
+    const getGroupColor = (name: string) => {
+        const map: Record<string, string> = {
+            'Black': '#1A1A1A',
+            'Espresso': '#4E342E',
+            'Gray': '#9E9E9E',
+            'Mushroom': '#A1887F',
+            'Navy': '#1A237E',
+            'Pink wild': '#E91E63',
+            'Sweet pink': '#F48FB1'
+        };
+        return map[name] || '#E0E0E0';
+    };
+
     const parsedTiers = product.tiers.map((t: any, i: number) => {
         const match = t.q.match(/\d+/);
         const fallbackThreshold = i === 0 ? 1 : i === 1 ? 5 : i === 2 ? 20 : 50;
@@ -156,7 +190,50 @@ export default function ProductDetail() {
                     </div>
                 </div>
 
-                {hasVariants && (
+                {hasVariants && groupedVariants ? (
+                    <div className="glass-panel" style={{ background: 'white', overflow: 'hidden' }}>
+                        <div style={{ padding: '1.25rem' }}>
+                            <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Elige tus colores y tallas</h3>
+                            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>Haz clic en un color para desplegar y seleccionar los tamaños.</p>
+                        </div>
+                        <div style={{ padding: '0 1.25rem 1.25rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {Object.entries(groupedVariants).map(([groupName, options]) => {
+                                const groupTotal = options.reduce((sum: number, opt: any) => sum + (variantQuantities[opt.id] || 0), 0);
+
+                                return (
+                                    <details key={groupName} style={{ background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+                                        <summary style={{ padding: '1rem', fontWeight: 'bold', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: getGroupColor(groupName), border: '1px solid rgba(0,0,0,0.1)' }} />
+                                                <span style={{ color: 'var(--text-primary)', fontSize: '0.95rem' }}>{groupName}</span>
+                                            </div>
+                                            {groupTotal > 0 && <span style={{ fontSize: '0.75rem', background: 'var(--accent-primary)', color: 'white', padding: '0.2rem 0.6rem', borderRadius: '12px' }}>{groupTotal} pzs</span>}
+                                        </summary>
+                                        <div style={{ padding: '0.5rem 1rem 1rem 1rem', background: 'white', borderTop: '1px solid var(--border-color)' }}>
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.75rem' }}>
+                                                {options.map((opt: any) => {
+                                                    const q = variantQuantities[opt.id] || 0;
+                                                    return (
+                                                        <div key={opt.id} style={{ border: '1px solid var(--border-color)', borderRadius: '6px', overflow: 'hidden' }}>
+                                                            <div style={{ padding: '0.4rem', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, background: 'var(--bg-secondary)', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)' }}>
+                                                                Talla {opt.optionLabel}
+                                                            </div>
+                                                            <div style={{ display: 'flex', alignItems: 'center', background: 'white' }}>
+                                                                <button onClick={() => handleUpdateVariantQuantity(opt.id, q - 1)} style={{ padding: '0.4rem 0.6rem', border: 'none', background: 'transparent', color: 'var(--text-primary)', fontWeight: 'bold', cursor: 'pointer' }}>-</button>
+                                                                <input type="number" readOnly value={q} style={{ flex: 1, width: '100%', textAlign: 'center', background: 'transparent', border: 'none', color: 'var(--text-primary)', fontWeight: 'bold', fontSize: '0.9rem' }} />
+                                                                <button onClick={() => handleUpdateVariantQuantity(opt.id, q + 1)} style={{ padding: '0.4rem 0.6rem', border: 'none', background: 'transparent', color: 'var(--text-primary)', fontWeight: 'bold', cursor: 'pointer' }}>+</button>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </details>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ) : hasVariants ? (
                     <div className="glass-panel" style={{ background: 'white', overflow: 'hidden' }}>
                         <div style={{ padding: '1.25rem' }}>
                             <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Elige tus variantes</h3>
@@ -192,7 +269,7 @@ export default function ProductDetail() {
                             </table>
                         </div>
                     </div>
-                )}
+                ) : null}
 
                 {/* Tier Pricing */}
                 <div className="glass-panel" style={{ padding: '1.25rem', background: 'white' }}>

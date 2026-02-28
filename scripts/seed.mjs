@@ -138,12 +138,13 @@ async function main() {
         await sql`
             INSERT INTO products (id, name, description, category, stock, min_stock, tag, status, last_sync, image)
             VALUES 
-            ('MERC-001', 'Alo Leggins', 'Tallas S, M y L. Colores: Negro, Café, Navy, Gris, Durazno', 'ALO ROPA', 150, 20, 'Top Ventas', 'active', 'Hace 2 min', '/images/leggings.png'),
+            ('MERC-001', 'Alo Leggins', 'Tallas S, M, L. Colores: Black, Espresso, Gray, Mushroom, Navy, Pink wild, Sweet pink', 'ALO ROPA', 250, 20, 'Top Ventas', 'active', 'Hace 2 min', '/images/leggings.png'),
             ('MERC-002', 'Hover-1 Board (Patineta)', 'Patineta Hoverboard Color, Negro y Rojo', 'HOVER BOARD', 45, 10, null, 'active', 'Hace 2 min', '/images/hoverboard.png'),
             ('MERC-003', 'Set Pijama Conjunto (2pzs)', '2 Conjuntos por Set, 2-3 Todler (Etiqueta con Marca)', 'PIJAMA NIÑO', 200, 50, 'No Acumulable', 'active', 'Hace 5 min', '/images/pajamas.png'),
             ('MERC-004', 'Pack Amazon Emprendedor (10 Pzs)', 'Productos de Amazon 10 Pzs por Caja', 'AMAZON PAQUETES', 24, 5, null, 'warning', 'Hace 12 min', '/images/amazon_box.png'),
             ('MERC-005', 'Pack Maquillaje Revolution (69Pzs)', 'Surtido variado: Bases, correctores, labiales, gloss, sombras y más', 'MAQUILLAJE', 12, 15, 'Premium', 'warning', 'Hace 1 hr', '/images/makeup.png'),
-            ('MERC-006', 'Ropa Target Mujer', 'Vestidos, playeras, pants con etiqueta de marca. Todas las tallas', 'ROPA TARGET', 500, 100, 'No Acumulable', 'active', 'Hace 2 min', '/images/target_clothes.png')
+            ('MERC-006', 'Ropa Target Mujer', 'Vestidos, playeras, pants con etiqueta de marca. Todas las tallas', 'ROPA TARGET', 500, 100, 'No Acumulable', 'active', 'Hace 2 min', '/images/target_clothes.png'),
+            ('MERC-008', 'Alo Short', 'Shorts deportivos Tallas S, M, L. Colores: Black, Espresso, Navy', 'ALO ROPA', 120, 15, 'Nuevo', 'active', 'Hace 5 min', '/images/leggings.png')
             ON CONFLICT (id) DO NOTHING;
         `;
 
@@ -179,7 +180,12 @@ async function main() {
             ('t21', 'MERC-006', 1, '1-9 pzs', 110, 1),
             ('t22', 'MERC-006', 2, '+10 pzs', 80, 10),
             ('t23', 'MERC-006', 3, '+50 pzs', 65, 50),
-            ('t24', 'MERC-006', 4, '+100 pzs', 55, 100)
+            ('t24', 'MERC-006', 4, '+100 pzs', 55, 100),
+            
+            ('t25', 'MERC-008', 1, '1-4 pzs', 850, 1),
+            ('t26', 'MERC-008', 2, '+5 pzs', 760, 5),
+            ('t27', 'MERC-008', 3, '+20 pzs', 680, 20),
+            ('t28', 'MERC-008', 4, '+30 pzs', 590, 30)
             ON CONFLICT (id) DO NOTHING;
         `;
 
@@ -187,13 +193,21 @@ async function main() {
         await sql`
             INSERT INTO product_variants (id, product_id, label)
             VALUES 
-            ('v1', 'MERC-001', 'Talla S - Negro'),
-            ('v2', 'MERC-001', 'Talla M - Negro'),
-            ('v3', 'MERC-001', 'Talla L - Negro'),
-            ('v4', 'MERC-001', 'Talla S - Navy'),
-            ('v5', 'MERC-001', 'Talla M - Navy'),
-            ('v6', 'MERC-001', 'Talla L - Navy'),
-            ('v7', 'MERC-001', 'Talla M - Durazno'),
+            -- Alo Leggins Variants
+            ('v_alo_leg_blk_s', 'MERC-001', 'Black - S'), ('v_alo_leg_blk_m', 'MERC-001', 'Black - M'), ('v_alo_leg_blk_l', 'MERC-001', 'Black - L'),
+            ('v_alo_leg_esp_s', 'MERC-001', 'Espresso - S'), ('v_alo_leg_esp_m', 'MERC-001', 'Espresso - M'), ('v_alo_leg_esp_l', 'MERC-001', 'Espresso - L'),
+            ('v_alo_leg_gry_m', 'MERC-001', 'Gray - M'), ('v_alo_leg_gry_l', 'MERC-001', 'Gray - L'),
+            ('v_alo_leg_msh_s', 'MERC-001', 'Mushroom - S'), ('v_alo_leg_msh_m', 'MERC-001', 'Mushroom - M'), ('v_alo_leg_msh_l', 'MERC-001', 'Mushroom - L'),
+            ('v_alo_leg_nvy_s', 'MERC-001', 'Navy - S'), ('v_alo_leg_nvy_m', 'MERC-001', 'Navy - M'), ('v_alo_leg_nvy_l', 'MERC-001', 'Navy - L'),
+            ('v_alo_leg_pnk_s', 'MERC-001', 'Pink wild - S'), ('v_alo_leg_pnk_m', 'MERC-001', 'Pink wild - M'), ('v_alo_leg_pnk_l', 'MERC-001', 'Pink wild - L'),
+            ('v_alo_leg_spnk_s', 'MERC-001', 'Sweet pink - S'), ('v_alo_leg_spnk_m', 'MERC-001', 'Sweet pink - M'), ('v_alo_leg_spnk_l', 'MERC-001', 'Sweet pink - L'),
+            
+            -- Alo Short Variants
+            ('v_alo_shr_blk_s', 'MERC-008', 'Black - S'), ('v_alo_shr_blk_m', 'MERC-008', 'Black - M'), ('v_alo_shr_blk_l', 'MERC-008', 'Black - L'),
+            ('v_alo_shr_esp_s', 'MERC-008', 'Espresso - S'), ('v_alo_shr_esp_m', 'MERC-008', 'Espresso - M'), ('v_alo_shr_esp_l', 'MERC-008', 'Espresso - L'),
+            ('v_alo_shr_nvy_s', 'MERC-008', 'Navy - S'), ('v_alo_shr_nvy_m', 'MERC-008', 'Navy - M'), ('v_alo_shr_nvy_l', 'MERC-008', 'Navy - L'),
+
+            -- Others
             ('v8', 'MERC-006', 'Mixto P/M/G (Sin especificar)')
             ON CONFLICT (id) DO NOTHING;
         `;
