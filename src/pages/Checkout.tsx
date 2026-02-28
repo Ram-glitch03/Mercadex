@@ -110,7 +110,7 @@ export default function Checkout() {
                         Tu pedido ha sido procesado correctamente. Hemos enviado un correo con tu recibo, y la <strong>Factura Electrónica (CFDI 4.0)</strong> se generará y enviará en los próximos minutos.
                     </p>
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-                        <button onClick={() => navigate('/dashboard/orders')} style={{ padding: '0.75rem 1.5rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
+                        <button onClick={() => navigate('/shop/orders')} style={{ padding: '0.75rem 1.5rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
                             Ver mis pedidos
                         </button>
                         <button onClick={() => navigate('/shop')} style={{ padding: '0.75rem 1.5rem', background: 'var(--accent-primary)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>

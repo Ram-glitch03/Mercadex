@@ -88,7 +88,7 @@ export default function Cart() {
                         </div>
 
                         <button
-                            onClick={() => navigate('/checkout')}
+                            onClick={() => navigate('/shop/checkout')}
                             style={{ width: '100%', padding: '1rem', background: 'var(--text-primary)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1rem', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'background 0.3s' }}
                             onMouseEnter={e => e.currentTarget.style.background = 'black'}
                             onMouseLeave={e => e.currentTarget.style.background = 'var(--text-primary)'}
